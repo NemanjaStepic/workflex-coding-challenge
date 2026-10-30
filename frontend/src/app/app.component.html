@@ -1,0 +1,20 @@
+<main class="page">
+  <div class="heading"><span class="task">Task: Show workations as table (2.5h)</span><p>We would like you to implement an API endpoint which lists the workations currently in the system.<br>The associated API endpoint URL should be <strong>/workflex/workation.</strong></p></div>
+  <div *ngIf="loading" class="notice" role="status">Loading workations…</div>
+  <div *ngIf="error" class="notice error" role="alert">{{error}} <button (click)="load()">Retry</button></div>
+  <div class="table-wrap" *ngIf="!loading && !error">
+    <table aria-label="Workations"><thead><tr>
+      <th *ngFor="let column of columns" [attr.aria-sort]="ariaSort(column.key)"><button type="button" (click)="sort(column.key)">{{column.label}} <span class="arrows" aria-hidden="true">{{sortSymbol(column.key)}}</span></button></th>
+    </tr></thead><tbody>
+      <tr *ngFor="let item of sorted; trackBy:trackById">
+        <td class="employee">{{item.employee}}</td>
+        <td><span class="country"><img class="flag" [src]="flagPath(item.origin)" [alt]="item.origin + ' flag'">{{item.origin}}</span></td>
+        <td><span class="country"><img class="flag" [src]="flagPath(item.destination)" [alt]="item.destination + ' flag'">{{item.destination}}</span></td>
+        <td>{{displayDate(item.start)}}</td><td>{{displayDate(item.end)}}</td>
+        <td class="days">{{item.workingDays}}</td>
+        <td><span class="risk" [ngClass]="riskClass(item.risk)"><img [src]="'/' + riskIcon(item.risk)" alt="" width="15" height="15">{{riskText(item.risk)}}</span></td>
+      </tr>
+      <tr *ngIf="workations.length===0"><td colspan="7" class="notice">No workations found.</td></tr>
+    </tbody></table>
+  </div>
+</main>
